@@ -1,0 +1,35 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jasmine": true,
+    "amd": true,
+    "worker": true
+  },
+  "extends": "eslint:recommended",
+  "plugins": ["vue"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "no-console": 0,
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "no-fallthrough": [
+      "error",
+      {
+        "commentPattern": "break[\\s\\w]*omitted"
+      }
+    ]
+  }
+}
