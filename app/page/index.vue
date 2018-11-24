@@ -6,9 +6,9 @@
             </md-app-toolbar>
             <md-app-drawer :md-active.sync="menuVisible">
                 <Menu :logged=logged :user=user menuVisible=menuVisible
-                      v-on:menu-player="showPlayers"
-                      v-on:menu-matches="showMatches"
-                      v-on:menu-teams="showTeams"
+                      v-on:menu-player="showTab('players')"
+                      v-on:menu-matches="showTab('matches')"
+                      v-on:menu-teams="showTab('teams')"
                       v-on:menu-logout="logOut"></Menu>
             </md-app-drawer>
 
@@ -59,22 +59,9 @@
             }
         },
         methods: {
-            showPlayers() {
-                this.content.players = true;
-                this.content.matches = false;
-                this.content.teams = false;
-                this.toggleMenu();
-            },
-            showMatches() {
-                this.content.players = false;
-                this.content.matches = true;
-                this.content.teams = false;
-                this.toggleMenu();
-            },
-            showTeams(){
-                this.content.players = false;
-                this.content.matches = false;
-                this.content.teams = true;
+            showTab(tab) {
+                Object.keys(this.content).forEach(key => this.content[key] = false);
+                this.content[tab] = true;
                 this.toggleMenu();
             },
             logOut() {
