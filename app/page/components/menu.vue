@@ -1,26 +1,39 @@
 <template>
     <div class="md-layout-item md-layout">
-        <md-toolbar class="md-transparent" md-elevation="0">Navigation</md-toolbar>
+        <md-toolbar v-if=logged class="md-primary" md-elevation="0">
+            <md-avatar class="md-large float-right margin-5">
+                <md-icon>account_circle</md-icon>
+            </md-avatar>
+            <span class="md-title">{{ user.name }}</span>
+            <span class="md-subheading"> {{ user.league }}</span>
+        </md-toolbar>
+
+        <md-toolbar v-if=!logged class="md-primary" md-elevation="0">
+
+        </md-toolbar>
 
         <md-list>
-            <md-list-item>
-                <md-icon>move_to_inbox</md-icon>
-                <span class="md-list-item-text">Inbox</span>
+
+            <md-list-item @click="$emit('menu-player')">
+                <md-icon>people</md-icon>
+                <span class="md-list-item-text">Players</span>
             </md-list-item>
 
-            <md-list-item>
-                <md-icon>send</md-icon>
-                <span class="md-list-item-text">Sent Mail</span>
+
+
+            <md-list-item @click="$emit('menu-matches')">
+                <md-icon>list</md-icon>
+                <span class="md-list-item-text">Matches</span>
             </md-list-item>
 
-            <md-list-item>
-                <md-icon>delete</md-icon>
-                <span class="md-list-item-text">Trash</span>
+            <md-list-item @click="$emit('menu-teams')">
+                <md-icon>favorite</md-icon>
+                <span class="md-list-item-text">Teams</span>
             </md-list-item>
 
-            <md-list-item>
-                <md-icon>error</md-icon>
-                <span class="md-list-item-text">Spam</span>
+            <md-list-item @click="$emit('menu-logout')">
+                <md-icon>exit_to_app</md-icon>
+                <span class="md-list-item-text">Log-Out</span>
             </md-list-item>
         </md-list>
     </div>
@@ -29,9 +42,8 @@
 <script>
     export default {
         name: 'Reveal',
-        props: ['menuVisible'],
-        data: () => ({
-        })
+        props: ['menuVisible','user', 'logged'],
+        data: () => ({})
     }
 </script>
 
@@ -65,5 +77,15 @@
 
     .md-title {
         line-height: 40px;
+    }
+
+    .md-subheading{
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .md-list{
+        width: 100%;
     }
 </style>
