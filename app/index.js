@@ -11,10 +11,26 @@ Vue.use(VueRouter);
 
 const routes = [
     {
-        path: '/*',
+        path: '/',
         name: 'home',
         component: () => import('./page/index.vue')
-    }];
+    },
+    {
+        path: '/signin',
+        name: 'signin',
+        component: () => import('./page/signin.vue')
+    },
+    {
+        path: '/pswdreset',
+        name: 'pswdreset',
+        component: () => import('./page/pswdreset.vue')
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: () => import('./page/register.vue')
+    }
+];
 
 const router = new VueRouter({
     routes

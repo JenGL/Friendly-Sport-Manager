@@ -2,36 +2,10 @@
     <div class="page-container">
         <md-app md-mode="reveal">
             <md-app-toolbar class="md-primary">
-                <md-button class="md-icon-button" @click="menuVisible = !menuVisible">
-                    <md-icon>menu</md-icon>
-                </md-button>
-                <span class="md-title">Amici Del Calcetto</span>
+                <Header :hideLogInfo=false :logged=logged v-on:menu-click="menuVisible = !menuVisible"></Header>
             </md-app-toolbar>
-
             <md-app-drawer :md-active.sync="menuVisible">
-                <md-toolbar class="md-transparent" md-elevation="0">Navigation</md-toolbar>
-
-                <md-list>
-                    <md-list-item>
-                        <md-icon>move_to_inbox</md-icon>
-                        <span class="md-list-item-text">Inbox</span>
-                    </md-list-item>
-
-                    <md-list-item>
-                        <md-icon>send</md-icon>
-                        <span class="md-list-item-text">Sent Mail</span>
-                    </md-list-item>
-
-                    <md-list-item>
-                        <md-icon>delete</md-icon>
-                        <span class="md-list-item-text">Trash</span>
-                    </md-list-item>
-
-                    <md-list-item>
-                        <md-icon>error</md-icon>
-                        <span class="md-list-item-text">Spam</span>
-                    </md-list-item>
-                </md-list>
+                <Menu menuVisible=menuVisible></Menu>
             </md-app-drawer>
 
             <md-app-content>
@@ -42,27 +16,57 @@
 </template>
 
 <script>
+    import Header from './components/header.vue';
+    import Menu from './components/menu.vue';
+    import DB from '../js/database';
+
     export default {
         name: 'Reveal',
+        components: {
+            Header,
+            Menu
+        },
         data: () => ({
-            menuVisible: false
-        })
+            menuVisible: false,
+            logged: false,
+            loginVisible: false,
+            registerVisible: false
+        }),
+        created: function() {
+            const token = DB.getItem('token');
+            const expires = DB.getItem('expires');
+            if(expires != null && Date.now() / 1000 | 0 < Number.parseInt(expires) && token != null){
+                this.logged = true;
+            }
+        }
     }
 </script>
 
 <style lang="scss" scoped>
-    .page-container{
+    .page-container {
         height: 100%;
     }
 
     .md-app {
         border: 1px solid rgba(#000, .12);
-        height:100%;
+        height: 100%;
     }
 
     // Demo purposes only
     .md-drawer {
         width: 230px;
         max-width: calc(100vw - 125px);
+    }
+
+    .float-right {
+        float: right;
+    }
+
+    .margin-5 {
+        margin: 0 5px;
+    }
+
+    .color-white {
+        color: white;
     }
 </style>

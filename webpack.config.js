@@ -3,7 +3,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { VueLoaderPlugin } = require('vue-loader');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const toExclude = [
     /node_modules/
@@ -18,10 +18,10 @@ module.exports = (env, options = {}) => {
         devtool: development ? "inline-sourcemap" : false,
         entry: "./app/index.js",
         output: {
-            path: path.join(__dirname, 'dist/assets/'),
+            path: path.join(__dirname, 'dist/'),
             filename: '[name].bundle.js',
             chunkFilename: '[name].js',
-            publicPath: 'http://localhost:8080/assets/'
+            publicPath: 'http://localhost:8080/'
         },
         plugins: development ? [
             new VueLoaderPlugin(),
