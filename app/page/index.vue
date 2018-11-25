@@ -14,8 +14,9 @@
 
             <md-app-content>
                 <Matches v-if="content.matches"></Matches>
-                <Players v-if="content.players"></Players>
+                <Players v-if="content.players" v-on:click-player="showTab('player', $event)"></Players>
                 <Teams v-if="content.teams"></Teams>
+                <Player v-if="content.player" :playerId="selectedPlayer"></Player>
             </md-app-content>
         </md-app>
     </div>
@@ -28,6 +29,7 @@
     import Matches from './components/matches.vue';
     import Players from './components/players.vue';
     import Teams from './components/teams.vue';
+    import Player from './components/player.vue';
 
     export default {
         name: 'Reveal',
@@ -36,15 +38,18 @@
             Menu,
             Players,
             Teams,
-            Matches
+            Matches,
+            Player
         },
         data: () => ({
             menuVisible: false,
             logged: false,
+            selectedPlayer: null,
             content: {
                 players: false,
                 matches: false,
-                teams: false
+                teams: false,
+                player: false
             },
             user: {
                 name: "GianGigi",
@@ -59,10 +64,11 @@
             }
         },
         methods: {
-            showTab(tab) {
+            showTab(tab, player) {
+                if(player) this.selectedPlayer = player;
                 Object.keys(this.content).forEach(key => this.content[key] = false);
                 this.content[tab] = true;
-                this.toggleMenu();
+                this.toggleMenu(false);
             },
             logOut() {
                 DB.removeItem('token');
@@ -70,8 +76,11 @@
                 this.logged = false;
                 this.toggleMenu();
             },
-            toggleMenu() {
-                this.menuVisible = !this.menuVisible;
+            toggleMenu(visible) {
+                if(visible != null)
+                    this.menuVisible = visible;
+                else
+                    this.menuVisible = !this.menuVisible;
             }
         }
     }
