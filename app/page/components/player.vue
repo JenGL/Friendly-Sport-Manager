@@ -43,7 +43,7 @@
 
 <script>
     export default {
-        name: 'Reveal',
+        name: 'Player',
         props: ['playerId'],
         data: () => ({
             player: null

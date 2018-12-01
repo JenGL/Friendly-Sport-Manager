@@ -63,7 +63,7 @@
     import DB from '../js/database.js';
 
     export default {
-        name: 'Reveal',
+        name: 'Register',
         components: {
             Header,
             Menu

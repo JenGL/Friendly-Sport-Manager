@@ -41,7 +41,7 @@
 
 <script>
     export default {
-        name: 'Reveal',
+        name: 'Menu',
         props: ['menuVisible','user', 'logged'],
         data: () => ({})
     }

@@ -26,7 +26,7 @@
 
 <script>
     export default {
-        name: 'Reveal',
+        name: 'Players',
         props: ['logged', 'hideLogInfo'],
         data: () => ({
             userslist: []

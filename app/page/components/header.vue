@@ -23,7 +23,7 @@
 
 <script>
     export default {
-        name: 'Reveal',
+        name: 'Header',
         props: ['logged','hideLogInfo'],
         data: () => ({
 

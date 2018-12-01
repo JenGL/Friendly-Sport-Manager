@@ -13,10 +13,11 @@
             </md-app-drawer>
 
             <md-app-content>
-                <Matches v-if="content.matches"></Matches>
+                <Matches v-if="content.matches" v-on:click-player="showTab('match', $event)"></Matches>
                 <Players v-if="content.players" v-on:click-player="showTab('player', $event)"></Players>
                 <Teams v-if="content.teams"></Teams>
                 <Player v-if="content.player" :playerId="selectedPlayer"></Player>
+                <Match v-if="content.match" :matchId="selectedMatch"></Match>
             </md-app-content>
         </md-app>
     </div>
@@ -30,26 +31,30 @@
     import Players from './components/players.vue';
     import Teams from './components/teams.vue';
     import Player from './components/player.vue';
+    import Match from './components/match.vue';
 
     export default {
-        name: 'Reveal',
+        name: 'Home',
         components: {
             Header,
             Menu,
             Players,
             Teams,
             Matches,
-            Player
+            Player,
+            Match
         },
         data: () => ({
             menuVisible: false,
             logged: false,
             selectedPlayer: null,
+            selectedMatch: null,
             content: {
                 players: false,
                 matches: false,
                 teams: false,
-                player: false
+                player: false,
+                match: false
             },
             user: {
                 name: "GianGigi",
@@ -64,8 +69,12 @@
             }
         },
         methods: {
-            showTab(tab, player) {
-                if(player) this.selectedPlayer = player;
+            showTab(tab, id) {
+                if(tab === 'player') {
+                    this.selectedPlayer = id;
+                } else if(tab === 'match') {
+                    this.selectedMatch = id;
+                }
                 Object.keys(this.content).forEach(key => this.content[key] = false);
                 this.content[tab] = true;
                 this.toggleMenu(false);
