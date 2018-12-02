@@ -4,7 +4,7 @@ import VueMaterial from 'vue-material';
 import 'reset-css';
 import './style.css';
 import 'vue-material/dist/vue-material.min.css';
-import 'vue-material/dist/theme/default.css'; // Default Material Theme
+import 'vue-material/dist/theme/default-dark.css'; // This line here
 
 Vue.use(VueMaterial);
 Vue.use(VueRouter);

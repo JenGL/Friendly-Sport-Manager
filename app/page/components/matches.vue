@@ -5,13 +5,14 @@
                 <h1 class="md-title">Matches</h1>
             </md-table-toolbar>
 
-            <md-table-row slot="md-table-row" slot-scope="{ item }">
+            <md-table-row slot="md-table-row" slot-scope="{ item }" @click="$emit('click-match',item.id)">
                 <md-table-cell md-label="Data" md-sort-by="data">{{ toData(item.data) }}</md-table-cell>
                 <md-table-cell md-label="Team 1">{{ item.team_1 }}</md-table-cell>
                 <md-table-cell md-label="Team 2">{{ item.team_2 }}</md-table-cell>
                 <md-table-cell md-label="Outcome">{{ item.team_1_score }} - {{ item.team_1_score }}</md-table-cell>
             </md-table-row>
         </md-table>
+
     </div>
 </template>
 

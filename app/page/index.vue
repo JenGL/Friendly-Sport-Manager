@@ -13,13 +13,28 @@
             </md-app-drawer>
 
             <md-app-content>
-                <Matches v-if="content.matches" v-on:click-player="showTab('match', $event)"></Matches>
+                <Matches v-if="content.matches" v-on:click-match="showTab('match', $event)"></Matches>
                 <Players v-if="content.players" v-on:click-player="showTab('player', $event)"></Players>
                 <Teams v-if="content.teams"></Teams>
                 <Player v-if="content.player" :playerId="selectedPlayer"></Player>
                 <Match v-if="content.match" :matchId="selectedMatch"></Match>
             </md-app-content>
         </md-app>
+        <md-speed-dial v-if="admin" class="md-bottom-right" md-direction="top">
+            <md-speed-dial-target>
+                <md-icon>add</md-icon>
+            </md-speed-dial-target>
+
+            <md-speed-dial-content class="md-primary">
+                <router-link to="/addplayer">
+                    <md-button class="md-icon-button md-primary"><md-icon>people</md-icon></md-button>
+                </router-link>
+
+                <router-link to="/addmatch">
+                    <md-button class="md-icon-button md-primary"><md-icon>event</md-icon></md-button>
+                </router-link>
+            </md-speed-dial-content>
+        </md-speed-dial>
     </div>
 </template>
 
@@ -47,6 +62,7 @@
         data: () => ({
             menuVisible: false,
             logged: false,
+            admin: false,
             selectedPlayer: null,
             selectedMatch: null,
             content: {
@@ -64,8 +80,12 @@
         created: function () {
             const token = DB.getItem('token');
             const expires = DB.getItem('expires');
+            const admin = DB.getItem('admin');
             if (expires != null && Date.now() / 1000 | 0 < Number.parseInt(expires) && token != null) {
                 this.logged = true;
+                if(admin === true) {
+                   this.admin = true;
+                }
             }
         },
         methods: {
