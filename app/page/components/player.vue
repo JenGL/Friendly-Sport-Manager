@@ -17,7 +17,7 @@
                     <h1 class="md-title">Matches</h1>
                 </md-table-toolbar>
 
-                <md-table-row slot="md-table-row" slot-scope="{ item }">
+                <md-table-row class="row" slot="md-table-row" slot-scope="{ item }" @click="$emit('click-match',item.id)">
                     <md-table-cell md-label="ID" md-numeric="">{{ item.id }}</md-table-cell>
                     <md-table-cell md-label="Data" md-sort-by="data">{{ item.data }}</md-table-cell>
                     <md-table-cell md-label="Outcome" md-numeric>{{ outcome(item.points) }}</md-table-cell>
@@ -31,7 +31,7 @@
                     <h1 class="md-title">Matches</h1>
                 </md-table-toolbar>
 
-                <md-table-row slot="md-table-row" slot-scope="{ item }">
+                <md-table-row class="row" slot="md-table-row" slot-scope="{ item }" @click="$emit('click-match',item.id)">
                     <md-table-cell md-label="Data" md-sort-by="data">{{ item.data }}</md-table-cell>
                     <md-table-cell md-label="Outcome" md-numeric>{{ outcome(item.points) }}</md-table-cell>
                     <md-table-cell md-label="Goals" md-numeric>{{ item.goal }}</md-table-cell>
@@ -111,5 +111,8 @@
         .md-table.md-medium-show {
             display: flex;
         }
+    }
+    .row{
+        cursor: pointer;
     }
 </style>

@@ -77,8 +77,6 @@
                 this.loading = true;
                 API.login(this.login.league, this.login.email, this.login.password).then(json => {
                     this.loading = false;
-                    DB.setItegm('token', json.token);
-                    DB.setItegm('expires', json.expires);
                     this.$router.push('/');
                 });
             }

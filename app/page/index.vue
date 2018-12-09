@@ -16,8 +16,8 @@
                 <Matches v-if="content.matches" v-on:click-match="showTab('match', $event)"></Matches>
                 <Players v-if="content.players" v-on:click-player="showTab('player', $event)"></Players>
                 <Teams v-if="content.teams"></Teams>
-                <Player v-if="content.player" :playerId="selectedPlayer"></Player>
-                <Match v-if="content.match" :matchId="selectedMatch"></Match>
+                <Player v-if="content.player" :playerId="selectedPlayer" v-on:click-match="showTab('match', $event)"></Player>
+                <Match v-if="content.match" :matchId="selectedMatch"  v-on:click-player="showTab('player', $event)"></Match>
             </md-app-content>
         </md-app>
         <md-speed-dial v-if="admin" class="md-bottom-right" md-direction="top">
@@ -25,13 +25,13 @@
                 <md-icon>add</md-icon>
             </md-speed-dial-target>
 
-            <md-speed-dial-content class="md-primary">
+            <md-speed-dial-content >
                 <router-link to="/addplayer">
-                    <md-button class="md-icon-button md-primary"><md-icon>people</md-icon></md-button>
+                    <md-button class="md-icon-button"><md-icon>people</md-icon></md-button>
                 </router-link>
 
                 <router-link to="/addmatch">
-                    <md-button class="md-icon-button md-primary"><md-icon>event</md-icon></md-button>
+                    <md-button class="md-icon-button"><md-icon>event</md-icon></md-button>
                 </router-link>
             </md-speed-dial-content>
         </md-speed-dial>
@@ -49,6 +49,7 @@
     import Match from './components/match.vue';
     import API from '../js/api';
     import User from "../js/User";
+    import TokenManager from "../js/token_manager";
 
     export default {
         name: 'Home',
@@ -80,22 +81,24 @@
             }
         }),
         created: function () {
-            const token = DB.getItem('token');
-            const expires = DB.getItem('expires');
-            const admin = DB.getItem('admin');
             API.onError((err) => {
                 if(err.error === "Not authorized") this.logOut()
             });
-            if (expires != null && Date.now() / 1000 | 0 < Number.parseInt(expires) && token != null) {
-                this.logged = true;
-                if(admin === true) {
-                   this.admin = true;
-                }
-            }
         },
         mounted(){
-            this.user.name = User.name;
-            this.user.league = User.league;
+            if (TokenManager.isTokenValid()) {
+                this.logged = true;
+                this.user.name = User.name;
+                this.user.league = User.league;
+                if(User.admin) {
+                    this.admin = true;
+                }
+            } else {
+                this.logged = false;
+                this.user.name = "";
+                this.user.league = "";
+                this.admin = false;
+            }
         },
         methods: {
             showTab(tab, id) {

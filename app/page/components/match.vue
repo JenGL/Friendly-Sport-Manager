@@ -15,7 +15,7 @@
         </div>
         <div class="score-card md-layout md-alignment-center-center">
             <md-table md-height="auto" v-model="all" md-card md-fixed-header class="md-primary md-layout table md-layout-item">
-                <md-table-row slot="md-table-row" slot-scope="{ item }">
+                <md-table-row class="row" slot="md-table-row" slot-scope="{ item }"  @click="$emit('click-player',item.id)">
                     <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
                     <md-table-cell md-label="Goals" md-numeric>{{ item.goal }}</md-table-cell>
                     <md-table-cell md-label="AutoGoals" md-numeric>{{ item.autogoal }}</md-table-cell>
@@ -91,5 +91,9 @@
 
     .md-table-row {
         background-color: var(--md-theme-default-primary, #448aff)
+    }
+
+    .row{
+        cursor: pointer;
     }
 </style>

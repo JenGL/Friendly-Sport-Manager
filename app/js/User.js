@@ -4,6 +4,7 @@ export default class User {
     static save(json) {
         DB.setItegm('name', json.username);
         DB.setItegm('league', json.league);
+        DB.setItegm('admin', json.admin);
     }
 
     static get name() {
@@ -12,5 +13,9 @@ export default class User {
 
     static get league() {
         return DB.getItem('league');
+    }
+
+    static get admin() {
+        return DB.getItem('admin');
     }
 }
