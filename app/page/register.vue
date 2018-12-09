@@ -61,6 +61,7 @@
     import Header from './components/header.vue';
     import Menu from './components/menu.vue';
     import DB from '../js/database.js';
+    import API from '../js/api';
 
     export default {
         name: 'Register',
@@ -84,15 +85,10 @@
                 // your code to login user
                 // this is only for example of loading
                 this.loading = true;
-                fetch('https://raw.githubusercontent.com/JenGL/c4lc3tt0_s3rv3r/master/auth.json')
-                    .then(response => response.json())
-                    .then(json => {
-                        this.loading = false;
-                        console.log(json);
-                        DB.setItegm('token', json.token);
-                        DB.setItegm('expires', json.expires);
-                        this.$router.push('/');
-                    });
+                API.register(this.login.league, this.login.email, this.login.password).then(json => {
+                    this.loading = false;
+                    this.$router.push('/');
+                });
             },
             goToPhase2() {
                 this.phase1 = false;

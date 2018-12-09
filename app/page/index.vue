@@ -47,6 +47,8 @@
     import Teams from './components/teams.vue';
     import Player from './components/player.vue';
     import Match from './components/match.vue';
+    import API from '../js/api';
+    import User from "../js/User";
 
     export default {
         name: 'Home',
@@ -73,20 +75,27 @@
                 match: false
             },
             user: {
-                name: "GianGigi",
-                league: "Arezzo"
+                name: "",
+                league: ""
             }
         }),
         created: function () {
             const token = DB.getItem('token');
             const expires = DB.getItem('expires');
             const admin = DB.getItem('admin');
+            API.onError((err) => {
+                if(err.error === "Not authorized") this.logOut()
+            });
             if (expires != null && Date.now() / 1000 | 0 < Number.parseInt(expires) && token != null) {
                 this.logged = true;
                 if(admin === true) {
                    this.admin = true;
                 }
             }
+        },
+        mounted(){
+            this.user.name = User.name;
+            this.user.league = User.league;
         },
         methods: {
             showTab(tab, id) {

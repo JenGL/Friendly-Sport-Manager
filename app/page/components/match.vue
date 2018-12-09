@@ -3,22 +3,22 @@
         <div class="team-card md-layout md-alignment-center-center">
             <md-card class="md-accent md-layout wrapper md-layout-item">
                 <div class="md-layout-item team">
-                    <span v-for="player of team1" :key="player.Name">{{ player.Name }}</span>
+                    <span v-for="player of team1" :key="player.name">{{ player.name }}</span>
                 </div>
                 <div class="md-layout-item md-layout md-alignment-center-center">
                     <span class="vs md-accent">3 - 2</span>
                 </div>
                 <div class="md-layout-item team team2">
-                    <span v-for="player of team2" :key="player.Name">{{ player.Name }}</span>
+                    <span v-for="player of team2" :key="player.name">{{ player.name }}</span>
                 </div>
             </md-card>
         </div>
         <div class="score-card md-layout md-alignment-center-center">
-            <md-table v-model="all" md-card md-fixed-header class="md-primary md-layout table md-layout-item">
+            <md-table md-height="auto" v-model="all" md-card md-fixed-header class="md-primary md-layout table md-layout-item">
                 <md-table-row slot="md-table-row" slot-scope="{ item }">
-                    <md-table-cell md-label="Name">{{ item.Name }}</md-table-cell>
-                    <md-table-cell md-label="Goals" md-numeric>{{ item.Goals }}</md-table-cell>
-                    <md-table-cell md-label="AutoGoals" md-numeric>{{ item.Autogoals }}</md-table-cell>
+                    <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
+                    <md-table-cell md-label="Goals" md-numeric>{{ item.goal }}</md-table-cell>
+                    <md-table-cell md-label="AutoGoals" md-numeric>{{ item.autogoal }}</md-table-cell>
                 </md-table-row>
             </md-table>
         </div>
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+    import API from '../../js/api';
+
     export default {
         name: 'Match',
         props: ['matchId'],
@@ -35,12 +37,11 @@
             all: []
         }),
         mounted: function () {
-            fetch('https://raw.githubusercontent.com/JenGL/c4lc3tt0_s3rv3r/master/match/' + this.matchId + '.json')
-                .then(res => res.json())
+            API.match(this.matchId)
                 .then(json => {
                     this.team1 = json.team_1;
                     this.team2 = json.team_2;
-                    this.all = json.team_1.concat(json.team_2).filter((p) => p.Goals + p.Autogoals > 0);
+                    this.all = json.team_1.concat(json.team_2).filter((p) => p.goal + p.autogoal > 0);
                 });
         },
         methods: {
@@ -61,6 +62,10 @@
         text-shadow: -1px 0 back, 0 1px back, 1px 0 back, 0 -1px back;
     }
 
+    .md-table-content {
+        height: auto;
+    }
+
     .team2 span {
         text-align: right;
     }
@@ -70,7 +75,7 @@
         padding: 30px;
     }
 
-    .table{
+    .table {
         max-width: 500px;
     }
 
@@ -82,5 +87,9 @@
 
     .score-card {
         margin-top: 20px;
+    }
+
+    .md-table-row {
+        background-color: var(--md-theme-default-primary, #448aff)
     }
 </style>
