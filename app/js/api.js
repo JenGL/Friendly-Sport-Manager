@@ -55,23 +55,40 @@ export default class Api {
     static player(id) {
         return GET(API_URL + 'player.php?id=' + id, true);
     }
+
+    static addPlayer(name, account, role, league) {
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('account', account);
+        formData.append('league', league);
+        formData.append('role', role);
+        return POST(API_URL + 'addplayer.php', formData, true, true);
+    }
+
+    static addMatch(team1, team2, league){
+        const formData = new FormData();
+        formData.append('team1', JSON.stringify(team1));
+        formData.append('team1', JSON.stringify(team2));
+        formData.append('league', league);
+        return POST(API_URL + 'addmatch.php', formData, true, true);
+    }
 }
 
 // PRIVATE FUNCTIONS
 
-function POST(url, body, needAuth = false) {
+function POST(url, body, needAuth = false, needAdmin = false) {
     const cfg = {
         method: "POST",
         body: body
     };
-    return exec(url, cfg, needAuth);
+    return exec(url, cfg, needAuth, needAdmin);
 }
 
-function GET(url, needAuth = false) {
-    return exec(url, {method: "GET",}, needAuth);
+function GET(url, needAuth = false, needAdmin = false) {
+    return exec(url, {method: "GET",}, needAuth, needAdmin);
 }
 
-function exec(url, cfg, needAuth) {
+function exec(url, cfg, needAuth, needAdmin) {
     const headers = new Headers();
     if (needAuth) {
         if (TokenManager.isTokenValid()) {
@@ -79,6 +96,10 @@ function exec(url, cfg, needAuth) {
         } else {
             Api.notifyError({error: "Not authorized"});
             return Promise.reject({error: "Not authorized"});
+        }
+        if(needAdmin && !User.admin) {
+            Api.notifyError({error: "Not authorized"});
+            return Promise.reject({error: "Not admin"});
         }
         cfg.headers = headers;
     }

@@ -18,6 +18,7 @@
                 <Teams v-if="content.teams"></Teams>
                 <Player v-if="content.player" :playerId="selectedPlayer" v-on:click-match="showTab('match', $event)"></Player>
                 <Match v-if="content.match" :matchId="selectedMatch"  v-on:click-player="showTab('player', $event)"></Match>
+                <AddPlayer v-if="content.addplayer"></AddPlayer>
             </md-app-content>
         </md-app>
         <md-speed-dial v-if="admin" class="md-bottom-right" md-direction="top">
@@ -26,13 +27,8 @@
             </md-speed-dial-target>
 
             <md-speed-dial-content >
-                <router-link to="/addplayer">
-                    <md-button class="md-icon-button"><md-icon>people</md-icon></md-button>
-                </router-link>
-
-                <router-link to="/addmatch">
-                    <md-button class="md-icon-button"><md-icon>event</md-icon></md-button>
-                </router-link>
+                <md-button class="md-icon-button" v-on:click-player="showTab('addplayer')"><md-icon>people</md-icon></md-button>
+                <md-button class="md-icon-button" v-on:click-player="showTab('addmatch')"><md-icon>event</md-icon></md-button>
             </md-speed-dial-content>
         </md-speed-dial>
     </div>
@@ -50,6 +46,7 @@
     import API from '../js/api';
     import User from "../js/User";
     import TokenManager from "../js/token_manager";
+    import AddPlayer from './components/addplayer.vue';
 
     export default {
         name: 'Home',
@@ -60,7 +57,8 @@
             Teams,
             Matches,
             Player,
-            Match
+            Match,
+            AddPlayer
         },
         data: () => ({
             menuVisible: false,
@@ -73,7 +71,8 @@
                 matches: false,
                 teams: false,
                 player: false,
-                match: false
+                match: false,
+                addplayer: false
             },
             user: {
                 name: "",
@@ -133,7 +132,6 @@
     }
 
     .md-app {
-        border: 1px solid rgba(#000, .12);
         height: 100%;
     }
 
