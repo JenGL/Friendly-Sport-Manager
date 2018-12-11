@@ -60,7 +60,6 @@
 <script>
     import Header from './components/header.vue';
     import Menu from './components/menu.vue';
-    import DB from '../js/database.js';
     import API from '../js/api';
 
     export default {

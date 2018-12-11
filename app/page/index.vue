@@ -19,6 +19,7 @@
                 <Player v-if="content.player" :playerId="selectedPlayer" v-on:click-match="showTab('match', $event)"></Player>
                 <Match v-if="content.match" :matchId="selectedMatch"  v-on:click-player="showTab('player', $event)"></Match>
                 <AddPlayer v-if="content.addplayer"></AddPlayer>
+                <AddMatch v-if="content.addmatch"></AddMatch>
             </md-app-content>
         </md-app>
         <md-speed-dial v-if="admin" class="md-bottom-right" md-direction="top">
@@ -27,8 +28,8 @@
             </md-speed-dial-target>
 
             <md-speed-dial-content >
-                <md-button class="md-icon-button" v-on:click-player="showTab('addplayer')"><md-icon>people</md-icon></md-button>
-                <md-button class="md-icon-button" v-on:click-player="showTab('addmatch')"><md-icon>event</md-icon></md-button>
+                <md-button class="md-icon-button" @click="showTab('addplayer')"><md-icon>people</md-icon></md-button>
+                <md-button class="md-icon-button" @click="showTab('addmatch')"><md-icon>event</md-icon></md-button>
             </md-speed-dial-content>
         </md-speed-dial>
     </div>
@@ -47,6 +48,7 @@
     import User from "../js/User";
     import TokenManager from "../js/token_manager";
     import AddPlayer from './components/addplayer.vue';
+    import AddMatch from './components/addmatch.vue';
 
     export default {
         name: 'Home',
@@ -58,7 +60,8 @@
             Matches,
             Player,
             Match,
-            AddPlayer
+            AddPlayer,
+            AddMatch
         },
         data: () => ({
             menuVisible: false,
@@ -72,7 +75,8 @@
                 teams: false,
                 player: false,
                 match: false,
-                addplayer: false
+                addplayer: false,
+                addmatch: false
             },
             user: {
                 name: "",

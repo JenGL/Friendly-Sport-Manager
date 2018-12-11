@@ -56,20 +56,21 @@ export default class Api {
         return GET(API_URL + 'player.php?id=' + id, true);
     }
 
-    static addPlayer(name, account, role, league) {
+    static addPlayer(name, account, role) {
         const formData = new FormData();
         formData.append('name', name);
-        formData.append('account', account);
-        formData.append('league', league);
-        formData.append('role', role);
+        formData.append('league', User.league);
+        if(account && account !== "") formData.append('account', account);
+        if(role && role !== "")formData.append('role', role);
         return POST(API_URL + 'addplayer.php', formData, true, true);
     }
 
-    static addMatch(team1, team2, league){
+    static addMatch(team1, team2, date){
         const formData = new FormData();
+        formData.append('data', date);
         formData.append('team1', JSON.stringify(team1));
-        formData.append('team1', JSON.stringify(team2));
-        formData.append('league', league);
+        formData.append('team2', JSON.stringify(team2));
+        formData.append('league', User.league);
         return POST(API_URL + 'addmatch.php', formData, true, true);
     }
 }
@@ -104,7 +105,9 @@ function exec(url, cfg, needAuth, needAdmin) {
         cfg.headers = headers;
     }
     return fetch(url, cfg)
-        .then(res => res.json())
+        .then(res => {
+            if(res.status === 200) return res.json();
+        })
         .catch(err => err.json().then(error => {
             Api.notifyError(error);
             throw error;

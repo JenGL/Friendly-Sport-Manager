@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+    <div class="wrapper centered-container">
         <md-content class="md-elevation-3 md-medium-size">
             <div class="title">
                 <img src="../../img/logo.png">
@@ -31,7 +31,13 @@
 
             <transition name="fade">
                 <div class="success-overlay" v-if="success">
-                    <md-progress-spinner md-mode="indeterminate" :md-stroke="2"></md-progress-spinner>
+                    <md-icon class="md-size-3x">done</md-icon>
+                </div>
+            </transition>
+
+            <transition name="fade">
+                <div class="fail-overlay" v-if="failed">
+                    <md-icon class="md-size-3x">clear</md-icon>
                 </div>
             </transition>
 
@@ -44,18 +50,27 @@
     import API from '../../js/api';
 
     export default {
-        name: 'Matches',
+        name: 'AddPlayer',
         data: () => ({
             name: "",
             account: "",
             role: "",
             loading: false,
+            success: false,
+            failed: false
         }),
         methods: {
             addplayer() {
                 this.loading = true;
                 API.addPlayer(this.name, this.account, this.role).then(() => {
                     this.loading = false;
+                    this.success = true;
+                    setTimeout(()=>this.success = false, 500);
+                }).catch((err) => {
+                    console.error(err);
+                    this.loading = false;
+                    this.failed = true;
+                    setTimeout(()=>this.failed = false, 500);
                 });
             }
         }
@@ -77,6 +92,14 @@
 
     .color-white {
         color: white;
+    }
+
+    .md-content {
+        z-index: 1;
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        position: relative;
     }
 
     .centered-container {
@@ -108,7 +131,7 @@
             max-width: 400px;
             position: relative;
         }
-        .loading-overlay, .success-overlay {
+        .loading-overlay, .success-overlay, .fail-overlay {
             z-index: 10;
             top: 0;
             left: 0;
@@ -126,8 +149,12 @@
             background: rgba(0, 179, 0, 0.9);
         }
 
+        .fail-overlay {
+            background: rgba(179, 1, 0, 0.9);
+        }
+
         .fade-enter-active, .fade-leave-active {
-            transition: opacity .5s;
+            transition: opacity .1s;
         }
         .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
             opacity: 0;
