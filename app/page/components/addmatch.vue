@@ -1,13 +1,14 @@
 <template>
     <div class="wrapper">
-        <div class="data-div md-layout md-alignment-center-center">
-
-            <md-datepicker class="md-layout-item md-medium-size-50 md-xsmall-size-80" v-model="date">
+        <div class="data-div md-layout md-alignment-center-center max-width-1200 centered">
+            <md-datepicker class="md-layout-item md-xlarge-size-50 md-large-size-50 md-medium-size-50 md-xsmall-size-80"
+                           v-model="date">
                 <label>Select Date</label>
             </md-datepicker>
         </div>
-        <div class="md-layout md-alignment-center-center">
-            <md-card class="md-layout-item md-medium-size-33 md-xsmall-size-90">
+        <div class="md-layout md-alignment-center-center max-width-1200 centered">
+            <md-card
+                    class="md-layout-item md-xlarge-size-35 md-large-size-35 md-medium-size-35 md-small-size-90 md-xsmall-size-90">
                 <md-card-area>
                     <md-card-header>
                         <div class="md-title">Team 1</div>
@@ -33,11 +34,12 @@
                 </md-card-area>
 
                 <md-card-actions md-alignment="right">
-                    <md-button v-if="teams[0].length < 5" @click="showDialog(0)">ADD</md-button>
+                    <md-button class="md-raised md-primary" v-if="teams[0].length < 5" @click="showDialog(0)">ADD
+                    </md-button>
                 </md-card-actions>
             </md-card>
 
-            <md-card class="md-layout-item md-medium-size-33 md-xsmall-size-90">
+            <md-card class="md-layout-item md-xlarge-size-35 md-large-size-35 md-medium-size-35 md-small-size-90">
                 <md-card-area>
                     <md-card-header>
                         <div class="md-title">Team 2</div>
@@ -63,7 +65,8 @@
                 </md-card-area>
 
                 <md-card-actions md-alignment="right">
-                    <md-button v-if="teams[1].length < 5" @click="showDialog(1)">ADD</md-button>
+                    <md-button class="md-raised md-primary" v-if="teams[1].length < 5" @click="showDialog(1)">ADD
+                    </md-button>
                 </md-card-actions>
             </md-card>
         </div>
@@ -93,12 +96,16 @@
                             <md-input v-model="dialog.autogoal" type="number"></md-input>
                         </md-field>
                         <md-dialog-actions>
-                            <md-button class="md-primary" @click="submitDialog()">ADD</md-button>
+                            <md-button class="md-raised md-primary" @click="submitDialog()">ADD</md-button>
                         </md-dialog-actions>
                     </md-step>
                 </md-steppers>
             </md-dialog-content>
         </md-dialog>
+        <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
+            <span>{{ snackbarMessage }}</span>
+            <md-button class="md-primary" @click="showSnackbar = false">Close</md-button>
+        </md-snackbar>
     </div>
 </template>
 
@@ -111,6 +118,10 @@
             date: '',
             players: [],
             teams: [[], []],
+            showSnackbar: false,
+            snackbarFailMessage: "The game was not added due to an error",
+            snackbarSuccessMessage: "The game was added successefully",
+            snackbarMessage: "",
             dialog: {
                 active: 'first',
                 team: null,
@@ -160,12 +171,25 @@
                     autogoal: 0
                 };
             },
+
+            reset() {
+                this.date = '';
+                this.teams.forEach(team => team.forEach(p => this.players.push(p)));
+                this.teams = [[], []];
+            },
+
             removeFromTeam(team, id) {
                 this.players.push(this.teams[team].splice(this.teams[team].findIndex((p) => p.id === id), 1)[0]);
             },
             submitMatch() {
                 API.addMatch(this.teams[0], this.teams[1], this.date.toISOString().slice(0, 10)).then(() => {
+                    this.showSnackbar = true;
+                    this.snackbarMessage = this.snackbarSuccessMessage;
+                    this.reset();
                 }).catch(() => {
+                    this.showSnackbar = true;
+                    this.snackbarMessage = this.snackbarFailMessage;
+                    this.reset();
                 });
             }
         }
@@ -173,6 +197,17 @@
 </script>
 
 <style lang="scss" scoped>
+
+    .centered {
+        position: relative;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+
+    .max-width-1200 {
+        max-width: 1200px;
+    }
 
     .submit-div, .data-div {
         margin-top: 30px;
@@ -184,7 +219,7 @@
 
     .wrapper {
         width: 100%;
-        height: 100%;
+        position: relative;
     }
 
     .md-card-actions {

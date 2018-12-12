@@ -41,6 +41,11 @@
                 </div>
             </transition>
 
+            <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
+                <span>{{ snackbarMessage }}</span>
+                <md-button class="md-primary" @click="showSnackbar = false">Close</md-button>
+            </md-snackbar>
+
         </md-content>
 
     </div>
@@ -57,20 +62,34 @@
             role: "",
             loading: false,
             success: false,
-            failed: false
+            failed: false,
+            showSnackbar: false,
+            snackbarFailMessage: "Plyaer was not added",
+            snackbarSuccessMessage: "Plyaer added successefully",
+            snackbarMessage: ""
         }),
         methods: {
             addplayer() {
                 this.loading = true;
                 API.addPlayer(this.name, this.account, this.role).then(() => {
+                    this.name = "";
+                    this.account = "";
+                    this.role = "";
                     this.loading = false;
                     this.success = true;
-                    setTimeout(()=>this.success = false, 500);
+                    this.snackbarMessage = this.snackbarSuccessMessage;
+                    this.showSnackbar = true;
+                    setTimeout(() => this.success = false, 500);
                 }).catch((err) => {
                     console.error(err);
+                    this.name = "";
+                    this.account = "";
+                    this.role = "";
                     this.loading = false;
                     this.failed = true;
-                    setTimeout(()=>this.failed = false, 500);
+                    this.showSnackbar = true;
+                    this.snackbarMessage = this.snackbarFailMessage;
+                    setTimeout(() => this.failed = false, 500);
                 });
             }
         }
@@ -156,7 +175,8 @@
         .fade-enter-active, .fade-leave-active {
             transition: opacity .1s;
         }
-        .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+        {
             opacity: 0;
         }
     }

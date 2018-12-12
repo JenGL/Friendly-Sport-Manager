@@ -12,7 +12,7 @@ const toExclude = [
 module.exports = (env, options = {}) => {
     const development = ((options.mode || 'development') === 'development');
     const publicPath = (env || {}).publicPath || 'http://localhost:8080/';
-
+    console.log("--------" + publicPath);
     return {
         context: __dirname,
         devtool: development ? "inline-sourcemap" : false,
@@ -21,7 +21,7 @@ module.exports = (env, options = {}) => {
             path: path.join(__dirname, 'dist/'),
             filename: '[name].bundle.js',
             chunkFilename: '[name].js',
-            publicPath: 'http://localhost:8080/'
+            publicPath: publicPath
         },
         plugins: development ? [
             new VueLoaderPlugin(),

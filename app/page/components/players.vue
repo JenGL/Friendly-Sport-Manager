@@ -17,7 +17,7 @@
                     </md-card-area>
                     <md-card-content class="md-layout">
                         <span class="md-layout-item">Position: {{ index + 1 }}</span> <span class="md-layout-item">Points: {{ user.points }}</span>
-                        <span class="md-layout-item">Goals: {{ user.goals }}</span>
+                        <span class="md-layout-item">Goals: {{ user.goal }}</span>
                     </md-card-content>
                 </md-ripple>
             </div>

@@ -107,6 +107,7 @@ function exec(url, cfg, needAuth, needAdmin) {
     return fetch(url, cfg)
         .then(res => {
             if(res.status === 200) return res.json();
+            if(res.status >= 400) throw res;
         })
         .catch(err => err.json().then(error => {
             Api.notifyError(error);
