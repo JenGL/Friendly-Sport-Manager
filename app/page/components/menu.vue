@@ -12,29 +12,41 @@
 
         </md-toolbar>
 
-        <md-list>
+        <md-list v-if=logged>
+            <router-link to="/players">
+                <md-list-item>
+                    <md-icon>people</md-icon>
+                    <span class="md-list-item-text">Players</span>
+                </md-list-item>
+            </router-link>
 
-            <md-list-item @click="$emit('menu-player')">
-                <md-icon>people</md-icon>
-                <span class="md-list-item-text">Players</span>
-            </md-list-item>
 
+            <router-link to="/matches">
+                <md-list-item>
+                    <md-icon>list</md-icon>
+                    <span class="md-list-item-text">Matches</span>
+                </md-list-item>
+            </router-link>
 
-
-            <md-list-item @click="$emit('menu-matches')">
-                <md-icon>list</md-icon>
-                <span class="md-list-item-text">Matches</span>
-            </md-list-item>
-
-            <md-list-item @click="$emit('menu-teams')">
-                <md-icon>favorite</md-icon>
-                <span class="md-list-item-text">Teams</span>
-            </md-list-item>
+            <router-link to="/teams">
+                <md-list-item>
+                    <md-icon>favorite</md-icon>
+                    <span class="md-list-item-text">Teams</span>
+                </md-list-item>
+            </router-link>
 
             <md-list-item @click="$emit('menu-logout')">
                 <md-icon>exit_to_app</md-icon>
                 <span class="md-list-item-text">Log-Out</span>
             </md-list-item>
+        </md-list>
+        <md-list v-if=!logged>
+            <router-link to="/signin">
+                <md-list-item>
+                    <md-icon>exit_to_app</md-icon>
+                    <span class="md-list-item-text">Log-In</span>
+                </md-list-item>
+            </router-link>
         </md-list>
     </div>
 </template>
@@ -42,7 +54,7 @@
 <script>
     export default {
         name: 'Menu',
-        props: ['menuVisible','user', 'logged'],
+        props: ['menuVisible', 'user', 'logged'],
         data: () => ({})
     }
 </script>
@@ -79,13 +91,13 @@
         line-height: 40px;
     }
 
-    .md-subheading{
+    .md-subheading {
         width: 100%;
         text-align: center;
         margin-bottom: 10px;
     }
 
-    .md-list{
+    .md-list {
         width: 100%;
     }
 </style>

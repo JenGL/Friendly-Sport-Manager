@@ -32,7 +32,8 @@
                     </div>
 
                     <div class="actions md-layout md-alignment-center-space-between">
-                        <router-link to="/pswdreset">Reset password</router-link>
+                        <router-link to="/pswdreset">Forgot password ?</router-link>
+                        <router-link to="/register">Register</router-link>
                         <md-button class="md-raised md-primary" @click="auth">Log in</md-button>
                     </div>
 

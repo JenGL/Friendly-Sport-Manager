@@ -23,6 +23,7 @@
                     </div>
 
                     <div class="actions md-layout md-alignment-center-space-between">
+                        <router-link to="/signin">Alraedy Registered ?</router-link>
                         <md-button class="md-raised md-primary" @click="goToPhase2">Next</md-button>
                     </div>
                 </md-content>
@@ -45,6 +46,7 @@
                     </div>
 
                     <div class="actions md-layout md-alignment-center-space-between">
+                        <router-link to="/signin">Alraedy Registered ?</router-link>
                         <md-button class="md-raised md-primary" @click="register">Register</md-button>
                     </div>
 

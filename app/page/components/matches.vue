@@ -9,7 +9,7 @@
                 <md-table-cell md-label="Data" md-sort-by="data">{{ item.data }}</md-table-cell>
                 <md-table-cell md-label="Team 1">{{ item.team_1 }}</md-table-cell>
                 <md-table-cell md-label="Team 2">{{ item.team_2 }}</md-table-cell>
-                <md-table-cell md-label="Outcome">{{ item.team_1_score }} - {{ item.team_1_score }}</md-table-cell>
+                <md-table-cell md-label="Outcome">{{ item.team_1_score }} - {{ item.team_2_score }}</md-table-cell>
             </md-table-row>
         </md-table>
 

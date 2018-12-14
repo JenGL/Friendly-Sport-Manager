@@ -6,7 +6,7 @@
                     <span v-for="player of team1" :key="player.name">{{ player.name }}</span>
                 </div>
                 <div class="md-layout-item md-layout md-alignment-center-center">
-                    <span class="vs md-accent">3 - 2</span>
+                    <span class="vs md-accent">{{team1_score}} - {{team2_score}}</span>
                 </div>
                 <div class="md-layout-item team team2">
                     <span v-for="player of team2" :key="player.name">{{ player.name }}</span>
@@ -14,8 +14,10 @@
             </md-card>
         </div>
         <div class="score-card md-layout md-alignment-center-center">
-            <md-table md-height="auto" v-model="all" md-card md-fixed-header class="md-primary md-layout table md-layout-item">
-                <md-table-row class="row" slot="md-table-row" slot-scope="{ item }"  @click="$emit('click-player',item.id)">
+            <md-table md-height="auto" v-model="all" md-card md-fixed-header
+                      class="md-primary md-layout table md-layout-item">
+                <md-table-row class="row" slot="md-table-row" slot-scope="{ item }"
+                              @click="$emit('click-player',item.id)">
                     <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
                     <md-table-cell md-label="Goals" md-numeric>{{ item.goal }}</md-table-cell>
                     <md-table-cell md-label="AutoGoals" md-numeric>{{ item.autogoal }}</md-table-cell>
@@ -30,18 +32,21 @@
 
     export default {
         name: 'Match',
-        props: ['matchId'],
         data: () => ({
             team1: [],
             team2: [],
-            all: []
+            all: [],
+            team1_score: "",
+            team2_score: ""
         }),
         mounted: function () {
-            API.match(this.matchId)
+            API.match(this.$route.params.id)
                 .then(json => {
                     this.team1 = json.team_1;
                     this.team2 = json.team_2;
                     this.all = json.team_1.concat(json.team_2).filter((p) => p.goal + p.autogoal > 0);
+                    this.team1_score = json.team_1.reduce((r, p) => parseInt(r) + parseInt(p.goal), 0) + json.team_2.reduce((r, p) => parseInt(r) + parseInt(p.autogoal), 0);
+                    this.team2_score = json.team_2.reduce((r, p) => parseInt(r) + parseInt(p.goal), 0) + json.team_1.reduce((r, p) => parseInt(r) + parseInt(p.autogoal), 0);
                 });
         },
         methods: {
@@ -93,7 +98,7 @@
         background-color: var(--md-theme-default-primary, #448aff)
     }
 
-    .row{
+    .row {
         cursor: pointer;
     }
 </style>

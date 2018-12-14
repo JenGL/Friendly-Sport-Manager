@@ -5,19 +5,15 @@
                 <Header :hideLogInfo=false :logged=logged v-on:menu-click="toggleMenu"></Header>
             </md-app-toolbar>
             <md-app-drawer :md-active.sync="menuVisible">
-                <Menu :logged=logged :user=user menuVisible=menuVisible
-                      v-on:menu-player="showTab('players')"
-                      v-on:menu-matches="showTab('matches')"
-                      v-on:menu-teams="showTab('teams')"
-                      v-on:menu-logout="logOut"></Menu>
+                <Menu :logged=logged :user=user menuVisible=menuVisible v-on:menu-logout="logOut"></Menu>
             </md-app-drawer>
 
             <md-app-content>
                 <Matches v-if="content.matches" v-on:click-match="showTab('match', $event)"></Matches>
                 <Players v-if="content.players" v-on:click-player="showTab('player', $event)"></Players>
                 <Teams v-if="content.teams"></Teams>
-                <Player v-if="content.player" :playerId="selectedPlayer" v-on:click-match="showTab('match', $event)"></Player>
-                <Match v-if="content.match" :matchId="selectedMatch"  v-on:click-player="showTab('player', $event)"></Match>
+                <Player v-if="content.player" v-on:click-match="showTab('match', $event)"></Player>
+                <Match v-if="content.match" v-on:click-player="showTab('player', $event)"></Match>
                 <AddPlayer v-if="content.addplayer"></AddPlayer>
                 <AddMatch v-if="content.addmatch"></AddMatch>
             </md-app-content>
@@ -27,9 +23,13 @@
                 <md-icon>add</md-icon>
             </md-speed-dial-target>
 
-            <md-speed-dial-content >
-                <md-button class="md-icon-button" @click="showTab('addplayer')"><md-icon>people</md-icon></md-button>
-                <md-button class="md-icon-button" @click="showTab('addmatch')"><md-icon>event</md-icon></md-button>
+            <md-speed-dial-content>
+                <md-button class="md-icon-button" @click="showTab('addplayer')">
+                    <md-icon>people</md-icon>
+                </md-button>
+                <md-button class="md-icon-button" @click="showTab('addmatch')">
+                    <md-icon>event</md-icon>
+                </md-button>
             </md-speed-dial-content>
         </md-speed-dial>
     </div>
@@ -63,6 +63,7 @@
             AddPlayer,
             AddMatch
         },
+        props: ['tab', 'id'],
         data: () => ({
             menuVisible: false,
             logged: false,
@@ -85,15 +86,16 @@
         }),
         created: function () {
             API.onError((err) => {
-                if(err.error === "Not authorized") this.logOut()
+                if (err.error === "Not authorized") this.logOut()
             });
         },
-        mounted(){
+        mounted() {
+            this.content[this.tab] = true;
             if (TokenManager.isTokenValid()) {
                 this.logged = true;
                 this.user.name = User.name;
                 this.user.league = User.league;
-                if(User.admin) {
+                if (User.admin) {
                     this.admin = true;
                 }
             } else {
@@ -105,23 +107,16 @@
         },
         methods: {
             showTab(tab, id) {
-                if(tab === 'player') {
-                    this.selectedPlayer = id;
-                } else if(tab === 'match') {
-                    this.selectedMatch = id;
-                }
-                Object.keys(this.content).forEach(key => this.content[key] = false);
-                this.content[tab] = true;
-                this.toggleMenu(false);
+                const path = id ? "/" + tab + "/" + id : "/" + tab;
+                this.$router.push(path);
             },
             logOut() {
                 DB.removeItem('token');
                 DB.removeItem('expires');
                 this.logged = false;
-                this.toggleMenu();
             },
             toggleMenu(visible) {
-                if(visible != null)
+                if (visible != null)
                     this.menuVisible = visible;
                 else
                     this.menuVisible = !this.menuVisible;

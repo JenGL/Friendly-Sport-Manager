@@ -46,12 +46,11 @@
 
     export default {
         name: 'Player',
-        props: ['playerId'],
         data: () => ({
             player: null
         }),
         mounted: function () {
-            API.player(this.playerId)
+            API.player(this.$route.params.id)
                 .then(json => {
                     this.player = json;
                 });

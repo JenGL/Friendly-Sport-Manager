@@ -39,14 +39,13 @@
             API.players()
                 .then(json => {
                     json.sort(function (a, b) {
-                        return b.Points - a.Points;
+                        return b.points - a.points;
                     });
                     json.forEach(p => {
                         p.color = randomColor({
                             luminosity: 'dark'
                         });
                     });
-                    console.log(json);
                     this.userslist = json;
                 });
         }
