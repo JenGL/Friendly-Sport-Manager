@@ -5,7 +5,12 @@
                 <md-icon>account_circle</md-icon>
             </md-avatar>
             <span class="md-title">{{ user.name }}</span>
-            <span class="md-subheading"> {{ user.league }}</span>
+            <md-field v-if="user.leagues.length > 1">
+                <md-select v-model="user.league.league" name="leagues" id="leagues" md-dense @md-selected="mdSelected">
+                    <md-option v-for="league in user.leagues" :key="league.league" :value="league.league" >{{ league.league }}</md-option>
+                </md-select>
+            </md-field>
+            <span v-if="user.leagues.length === 1" class="md-subheading"> {{ user.league.league }}</span>
         </md-toolbar>
 
         <md-toolbar v-if=!logged class="md-primary" md-elevation="0">
@@ -55,7 +60,21 @@
     export default {
         name: 'Menu',
         props: ['menuVisible', 'user', 'logged'],
-        data: () => ({})
+        data: () => ({
+            justMounted: true
+        }),
+        mounted(){
+          this.justMounted = true;
+        },
+        methods: {
+            mdSelected(val){
+                if(this.justMounted){
+                    this.justMounted = false;
+                    return;
+                }
+                this.$emit('click-league', val);
+            }
+        }
     }
 </script>
 

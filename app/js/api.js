@@ -26,9 +26,8 @@ export default class Api {
             });
     }
 
-    static login(league, username, password) {
+    static login(username, password) {
         const formData = new FormData();
-        formData.append('league', league);
         formData.append('username', username);
         formData.append('password', md5(password));
         return POST(API_URL + 'login.php', formData)
@@ -41,11 +40,11 @@ export default class Api {
 
     static players() {
 
-        return GET(API_URL + 'players.php?league=' + User.league, true);
+        return GET(API_URL + 'players.php?league=' + User.currentLeague.league, true);
     }
 
     static matches() {
-        return GET(API_URL + 'matches.php?league=' + User.league, true);
+        return GET(API_URL + 'matches.php?league=' + User.currentLeague.league, true);
     }
 
     static match(id) {
@@ -59,10 +58,10 @@ export default class Api {
     static addPlayer(name, account, role) {
         const formData = new FormData();
         formData.append('name', name);
-        formData.append('league', User.league);
+        formData.append('league', User.currentLeague.league);
         if(account && account !== "") formData.append('account', account);
         if(role && role !== "")formData.append('role', role);
-        return POST(API_URL + 'addplayer.php', formData, true, true);
+        return POST(API_URL + 'player.php', formData, true, true);
     }
 
     static addMatch(team1, team2, date){
@@ -70,8 +69,8 @@ export default class Api {
         formData.append('data', date);
         formData.append('team1', JSON.stringify(team1));
         formData.append('team2', JSON.stringify(team2));
-        formData.append('league', User.league);
-        return POST(API_URL + 'addmatch.php', formData, true, true);
+        formData.append('league', User.currentLeague.league);
+        return POST(API_URL + 'match.php', formData, true, true);
     }
 }
 
@@ -98,7 +97,7 @@ function exec(url, cfg, needAuth, needAdmin) {
             Api.notifyError({error: "Not authorized"});
             return Promise.reject({error: "Not authorized"});
         }
-        if(needAdmin && !User.admin) {
+        if(needAdmin && !User.currentLeague.admin) {
             Api.notifyError({error: "Not authorized"});
             return Promise.reject({error: "Not admin"});
         }

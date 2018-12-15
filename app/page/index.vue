@@ -5,7 +5,7 @@
                 <Header :hideLogInfo=false :logged=logged v-on:menu-click="toggleMenu"></Header>
             </md-app-toolbar>
             <md-app-drawer :md-active.sync="menuVisible">
-                <Menu :logged=logged :user=user menuVisible=menuVisible v-on:menu-logout="logOut"></Menu>
+                <Menu :logged=logged :user=user menuVisible=menuVisible v-on:menu-logout="logOut" v-on:click-league="switchLeague($event)"></Menu>
             </md-app-drawer>
 
             <md-app-content>
@@ -81,7 +81,8 @@
             },
             user: {
                 name: "",
-                league: ""
+                league: {},
+                leagues: []
             }
         }),
         created: function () {
@@ -94,14 +95,16 @@
             if (TokenManager.isTokenValid()) {
                 this.logged = true;
                 this.user.name = User.name;
-                this.user.league = User.league;
-                if (User.admin) {
+                this.user.league = User.currentLeague;
+                this.user.leagues = User.leagues;
+                if (User.currentLeague.admin) {
                     this.admin = true;
                 }
             } else {
                 this.logged = false;
                 this.user.name = "";
-                this.user.league = "";
+                this.user.league = {};
+                this.user.leagues = [];
                 this.admin = false;
             }
         },
@@ -120,6 +123,10 @@
                     this.menuVisible = visible;
                 else
                     this.menuVisible = !this.menuVisible;
+            },
+            switchLeague(league){
+                User.switchLeague(league);
+                this.$router.push("/");
             }
         }
     }

@@ -1,5 +1,5 @@
 export default class DB {
-    static setItegm(a,b){
+    static setItem(a,b){
         return localStorage.setItem(a,b);
     }
 

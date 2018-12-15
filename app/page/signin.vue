@@ -17,10 +17,6 @@
 
                     <div class="form">
                         <md-field>
-                            <label>League</label>
-                            <md-input v-model="login.league" autofocus></md-input>
-                        </md-field>
-                        <md-field>
                             <label>E-mail</label>
                             <md-input v-model="login.email" autofocus></md-input>
                         </md-field>
@@ -67,8 +63,7 @@
             loading: false,
             login: {
                 email: "",
-                password: "",
-                league: ""
+                password: ""
             }
         }),
         methods: {
@@ -76,7 +71,7 @@
                 // your code to login user
                 // this is only for example of loading
                 this.loading = true;
-                API.login(this.login.league, this.login.email, this.login.password).then(json => {
+                API.login(this.login.email, this.login.password).then(() => {
                     this.loading = false;
                     this.$router.push('/');
                 });
