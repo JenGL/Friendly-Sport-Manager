@@ -47,6 +47,10 @@ export default class Api {
         return GET(API_URL + 'matches.php?league=' + User.currentLeague.league, true);
     }
 
+    static teams() {
+        return GET(API_URL + 'teams.php?league=' + User.currentLeague.league, true);
+    }
+
     static match(id) {
         return GET(API_URL + 'match.php?id=' + id, true);
     }
