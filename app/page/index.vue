@@ -5,7 +5,8 @@
                 <Header :hideLogInfo=false :logged=logged v-on:menu-click="toggleMenu"></Header>
             </md-app-toolbar>
             <md-app-drawer :md-active.sync="menuVisible">
-                <Menu :logged=logged :user=user menuVisible=menuVisible v-on:menu-logout="logOut" v-on:click-league="switchLeague($event)"></Menu>
+                <Menu :logged=logged :user=user menuVisible=menuVisible v-on:menu-logout="logOut"
+                      v-on:click-league="switchLeague($event)"></Menu>
             </md-app-drawer>
 
             <md-app-content>
@@ -38,7 +39,6 @@
 <script>
     import Header from './components/header.vue';
     import Menu from './components/menu.vue';
-    import DB from '../js/database';
     import Matches from './components/matches.vue';
     import Players from './components/players.vue';
     import Teams from './components/teams.vue';
@@ -91,21 +91,34 @@
             });
         },
         mounted() {
-            this.content[this.tab] = true;
-            if (TokenManager.isTokenValid()) {
+            const success = () => {
                 this.logged = true;
-                this.user.name = User.name;
-                this.user.league = User.currentLeague;
-                this.user.leagues = User.leagues;
-                if (User.currentLeague.admin) {
+                this.user.name = User.getInstance().name;
+                this.user.league = User.getInstance().currentLeague;
+                this.user.leagues = User.getInstance().leagues;
+                if (User.getInstance().currentLeague.admin) {
                     this.admin = true;
                 }
-            } else {
+            };
+
+            const fail = () => {
                 this.logged = false;
                 this.user.name = "";
                 this.user.league = {};
                 this.user.leagues = [];
                 this.admin = false;
+                TokenManager.deleteToken();
+            };
+
+            this.content[this.tab] = true;
+            if (TokenManager.isTokenValid() && User.created) {
+                success();
+            } else if (TokenManager.isTokenValid() && !User.created) {
+                API.loginByToken()
+                    .then(() => success())
+                    .catch(() => fail());
+            } else {
+                fail();
             }
         },
         methods: {
@@ -114,8 +127,8 @@
                 this.$router.push(path);
             },
             logOut() {
-                DB.removeItem('token');
-                DB.removeItem('expires');
+                TokenManager.deleteToken();
+                User.getInstance().destroy();
                 this.logged = false;
             },
             toggleMenu(visible) {
@@ -124,8 +137,8 @@
                 else
                     this.menuVisible = !this.menuVisible;
             },
-            switchLeague(league){
-                User.switchLeague(league);
+            switchLeague(league) {
+                User.getInstance().switchLeague(league);
                 this.$router.push("/");
             }
         }

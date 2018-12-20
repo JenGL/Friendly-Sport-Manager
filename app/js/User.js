@@ -1,36 +1,61 @@
-import DB from "./database";
-
 export default class User {
+    constructor() {
+        if(User.instance == null) User.instance = this;
+        return User.instance;
+    }
+
+    static get created(){
+        return User.instance != null;
+    }
+
+    static getInstance(){
+        return new User();
+    }
+
     static save(json) {
-        DB.setItem('name', json.username);
-        DB.setItem('leagues', JSON.stringify(json.leagues));
-        DB.setItem('leagues', JSON.stringify(json.leagues));
-        DB.setItem('currentLeague', JSON.stringify(json.leagues[0]));
+        const user = new User();
+        user.name = json.username;
+        user.leagues = json.leagues;
+        user.currentLeague = json.leagues[0];
+        return user;
     }
 
-    static get name() {
-        return DB.getItem('name');
+    destroy() {
+        delete this.name;
+        delete this.leagues;
+        delete this.currentLeague;
+        delete User.instance;
     }
 
-    static get leagues() {
-        return JSON.parse(DB.getItem('leagues'));
+    get name() {
+        return this._name;
     }
 
-    static set currentLeague(l) {
-        if (l) {
-            DB.setItem('currentLeague', JSON.stringify(l));
-        }
+    set name(n) {
+        this._name = n;
     }
 
-    static get currentLeague() {
-        return JSON.parse(DB.getItem('currentLeague'));
+    get leagues() {
+        return this._league;
     }
 
-    static isAdmin(league) {
-        return User.leagues.find((l) => l.league === league).admin;
+    set leagues(l) {
+        this._league = l;
     }
 
-    static switchLeague(name) {
-        User.currentLeague = User.leagues.find((l) => l.league === name);
+    set currentLeague(l) {
+        this._crtLeague = l;
+    }
+
+    get currentLeague() {
+        return this._crtLeague;
+    }
+
+    isAdmin(league) {
+        return this.leagues.find((l) => l.league === league).admin;
+    }
+
+    switchLeague(league) {
+        this.currentLeague = this.leagues.find((l) => l.league === league);
     }
 }

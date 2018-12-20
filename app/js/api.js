@@ -38,17 +38,25 @@ export default class Api {
             });
     }
 
+    static loginByToken(){
+        return GET(API_URL + 'login.php', true)
+            .then(json => {
+                User.save(json);
+                return json;
+            });
+    }
+
     static players() {
 
-        return GET(API_URL + 'players.php?league=' + User.currentLeague.league, true);
+        return GET(API_URL + 'players.php?league=' + User.getInstance().currentLeague.league, true);
     }
 
     static matches() {
-        return GET(API_URL + 'matches.php?league=' + User.currentLeague.league, true);
+        return GET(API_URL + 'matches.php?league=' + User.getInstance().currentLeague.league, true);
     }
 
     static teams() {
-        return GET(API_URL + 'teams.php?league=' + User.currentLeague.league, true);
+        return GET(API_URL + 'teams.php?league=' + User.getInstance().currentLeague.league, true);
     }
 
     static match(id) {
@@ -62,7 +70,7 @@ export default class Api {
     static addPlayer(name, account, role) {
         const formData = new FormData();
         formData.append('name', name);
-        formData.append('league', User.currentLeague.league);
+        formData.append('league', User.getInstance().currentLeague.league);
         if(account && account !== "") formData.append('account', account);
         if(role && role !== "")formData.append('role', role);
         return POST(API_URL + 'player.php', formData, true, true);
@@ -73,7 +81,7 @@ export default class Api {
         formData.append('data', date);
         formData.append('team1', JSON.stringify(team1));
         formData.append('team2', JSON.stringify(team2));
-        formData.append('league', User.currentLeague.league);
+        formData.append('league', User.getInstance().currentLeague.league);
         return POST(API_URL + 'match.php', formData, true, true);
     }
 }
@@ -101,7 +109,7 @@ function exec(url, cfg, needAuth, needAdmin) {
             Api.notifyError({error: "Not authorized"});
             return Promise.reject({error: "Not authorized"});
         }
-        if(needAdmin && !User.currentLeague.admin) {
+        if(needAdmin && ((User.created && !User.getInstance().currentLeague.admin) || !User.created)) {
             Api.notifyError({error: "Not authorized"});
             return Promise.reject({error: "Not admin"});
         }

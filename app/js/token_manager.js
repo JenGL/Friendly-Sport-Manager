@@ -1,5 +1,4 @@
 import DB from './database';
-import User from './User';
 
 export default class TokenManager{
     static saveToken(json) {
@@ -11,8 +10,12 @@ export default class TokenManager{
         return DB.getItem('token');
     }
 
+    static deleteToken(){
+        DB.removeItem('token');
+    }
+
     static isTokenValid() {
-        if(DB.getItem('token') == null || DB.getItem('expires') == null || User.currentLeague == null) return false;
+        if(DB.getItem('token') == null || DB.getItem('expires') == null) return false;
         const token = DB.getItem('token');
         const expires = mysqlTimeStampToDate(DB.getItem('expires'));
         const today = new Date();
