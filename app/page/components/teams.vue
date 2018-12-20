@@ -17,20 +17,24 @@
 
 <script>
     import API from '../../js/api';
+    import RouteBackMixin from './route_back_mixin';
 
     export default {
         name: 'Teams',
+        mixins: [RouteBackMixin],
         data: () => ({
             teams: []
         }),
         mounted: function () {
-            API.teams()
-                .then(json => {
-                    json.forEach(t => {
-                        t.team = t.p1_name + " - " + t.p2_name + " - " + t.p3_name + " - " + t.p4_name + " - " + t.p5_name;
+            if (!this.routingBack) {
+                API.teams()
+                    .then(json => {
+                        json.forEach(t => {
+                            t.team = t.p1_name + " - " + t.p2_name + " - " + t.p3_name + " - " + t.p4_name + " - " + t.p5_name;
+                        });
+                        this.teams = json
                     });
-                    this.teams = json
-                });
+            }
         }
     }
 </script>

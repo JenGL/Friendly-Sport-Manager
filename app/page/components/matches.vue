@@ -18,21 +18,26 @@
 
 <script>
     import API from '../../js/api';
+    import RouteBackMixin from './route_back_mixin';
 
     export default {
         name: 'Matches',
+        mixins:[RouteBackMixin],
         data: () => ({
             matches: []
         }),
         mounted: function () {
-            API.matches()
-                .then(json => {
-                    json.forEach((e, i) => {
-                        e.team_1 = e.team_1.reduce((acc, e) => acc + "\n" + e);
-                        e.team_2 = e.team_2.reduce((acc, e) => acc + "\n" + e);
+            if (!this.routingBack) {
+                API.matches()
+                    .then(json => {
+                        json.forEach((e, i) => {
+                            e.team_1 = e.team_1.reduce((acc, e) => acc + "\n" + e);
+                            e.team_2 = e.team_2.reduce((acc, e) => acc + "\n" + e);
+                        });
+                        this.matches = json;
                     });
-                    this.matches = json;
-                });
+            }
+
         }
     }
 </script>

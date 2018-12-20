@@ -43,17 +43,22 @@
 
 <script>
     import API from "../../js/api";
+    import RouteBackMixin from './route_back_mixin';
 
     export default {
         name: 'Player',
+        mixins:[RouteBackMixin],
         data: () => ({
             player: null
         }),
         mounted: function () {
-            API.player(this.$route.params.id)
-                .then(json => {
-                    this.player = json;
-                });
+            if (!this.routingBack) {
+                API.player(this.$route.params.id)
+                    .then(json => {
+                        this.player = json;
+                    });
+            }
+
         },
         methods: {
             outcome(points) {

@@ -28,26 +28,30 @@
 <script>
     import API from '../../js/api';
     import randomColor from 'randomcolor';
+    import RouteBackMixin from './route_back_mixin';
 
     export default {
         name: 'Players',
+        mixins:[RouteBackMixin],
         props: ['logged', 'hideLogInfo'],
         data: () => ({
             userslist: []
         }),
         mounted: function () {
-            API.players()
-                .then(json => {
-                    json.sort(function (a, b) {
-                        return b.points - a.points;
-                    });
-                    json.forEach(p => {
-                        p.color = randomColor({
-                            luminosity: 'dark'
+            if(!this.routingBack){
+                API.players()
+                    .then(json => {
+                        json.sort(function (a, b) {
+                            return b.points - a.points;
                         });
+                        json.forEach(p => {
+                            p.color = randomColor({
+                                luminosity: 'dark'
+                            });
+                        });
+                        this.userslist = json;
                     });
-                    this.userslist = json;
-                });
+            }
         }
     }
 </script>

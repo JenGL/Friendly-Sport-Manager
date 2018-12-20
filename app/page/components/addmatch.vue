@@ -111,9 +111,11 @@
 
 <script>
     import API from '../../js/api';
+    import RouteBackMixin from './route_back_mixin';
 
     export default {
         name: 'AddMatch',
+        mixins: [RouteBackMixin],
         data: () => ({
             date: '',
             players: [],
@@ -134,10 +136,13 @@
             },
         }),
         mounted: function () {
-            API.players()
-                .then(json => {
-                    this.players = json;
-                });
+            this.routeBackIfNotAdmin();
+            if (!this.routingBack) {
+                API.players()
+                    .then(json => {
+                        this.players = json;
+                    });
+            }
         },
         methods: {
             showDialog(team) {

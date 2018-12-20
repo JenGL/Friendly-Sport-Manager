@@ -29,9 +29,11 @@
 
 <script>
     import API from '../../js/api';
+    import RouteBackMixin from './route_back_mixin';
 
     export default {
         name: 'Match',
+        mixins: [RouteBackMixin],
         data: () => ({
             team1: [],
             team2: [],
@@ -40,14 +42,17 @@
             team2_score: ""
         }),
         mounted: function () {
-            API.match(this.$route.params.id)
-                .then(json => {
-                    this.team1 = json.team_1;
-                    this.team2 = json.team_2;
-                    this.all = json.team_1.concat(json.team_2).filter((p) => p.goal + p.autogoal > 0);
-                    this.team1_score = json.team_1.reduce((r, p) => parseInt(r) + parseInt(p.goal), 0) + json.team_2.reduce((r, p) => parseInt(r) + parseInt(p.autogoal), 0);
-                    this.team2_score = json.team_2.reduce((r, p) => parseInt(r) + parseInt(p.goal), 0) + json.team_1.reduce((r, p) => parseInt(r) + parseInt(p.autogoal), 0);
-                });
+            if (!this.routingBack) {
+                API.match(this.$route.params.id)
+                    .then(json => {
+                        this.team1 = json.team_1;
+                        this.team2 = json.team_2;
+                        this.all = json.team_1.concat(json.team_2).filter((p) => p.goal + p.autogoal > 0);
+                        this.team1_score = json.team_1.reduce((r, p) => parseInt(r) + parseInt(p.goal), 0) + json.team_2.reduce((r, p) => parseInt(r) + parseInt(p.autogoal), 0);
+                        this.team2_score = json.team_2.reduce((r, p) => parseInt(r) + parseInt(p.goal), 0) + json.team_1.reduce((r, p) => parseInt(r) + parseInt(p.autogoal), 0);
+                    });
+            }
+
         },
         methods: {
             toData(data) {

@@ -53,9 +53,11 @@
 
 <script>
     import API from '../../js/api';
+    import RouteBackMixin from './route_back_mixin';
 
     export default {
         name: 'AddPlayer',
+        mixins:[RouteBackMixin],
         data: () => ({
             name: "",
             account: "",
@@ -68,6 +70,9 @@
             snackbarSuccessMessage: "Plyaer added successefully",
             snackbarMessage: ""
         }),
+        mounted(){
+            this.routeBackIfNotAdmin();
+        },
         methods: {
             addplayer() {
                 this.loading = true;

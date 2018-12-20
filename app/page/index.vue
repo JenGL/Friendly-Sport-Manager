@@ -130,6 +130,7 @@
                 TokenManager.deleteToken();
                 User.getInstance().destroy();
                 this.logged = false;
+                this.toggleMenu(false);
             },
             toggleMenu(visible) {
                 if (visible != null)
