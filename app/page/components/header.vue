@@ -3,7 +3,7 @@
         <md-button class="md-icon-button" @click="$emit('menu-click')">
             <md-icon>menu</md-icon>
         </md-button>
-        <span class="md-title line-height-40">Amici Del Calcetto</span>
+        <span class="md-title line-height-40">Friendly Soccer League</span>
         <div v-if="!logged && !hideLogInfo" class="md-toolbar-section-end">
             <router-link to="/signin" class="float-right margin-5"><span class="color-white">Login</span></router-link>
             |

@@ -12,7 +12,7 @@
                 <md-content v-if="phase1" class="md-elevation-3 md-medium-size">
                     <div class="title">
                         <img src="../img/logo.png">
-                        <div class="md-title">Friendly Sport Manager</div>
+                        <div class="md-title">Friendly Soccer League</div>
                     </div>
 
                     <div class="form">
@@ -30,7 +30,7 @@
                 <md-content v-if="phase2" class="md-elevation-3 md-medium-size">
                     <div class="title">
                         <img src="../img/logo.png">
-                        <div class="md-title">Friendly Sport Manager</div>
+                        <div class="md-title">FriendlyFriendly Soccer League</div>
                     </div>
 
                     <div class="form">
